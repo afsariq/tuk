@@ -3,9 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class Profilescreen extends StatelessWidget {
+class Profilescreen extends StatefulWidget {
+  @override
+  _ProfilescreenState createState() => _ProfilescreenState();
+}
+
+class _ProfilescreenState extends State<Profilescreen> {
   String id = FirebaseAuth.instance.currentUser.uid;
+  String _userName;
+  void initState() {
+    super.initState();
+    _getUserName();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,11 +136,26 @@ class Profilescreen extends StatelessWidget {
                       flex: 1,
                       child: Text("abcd@gmail.com"),
                     ),
+                    RaisedButton(onPressed: () {
+                      print(_userName);
+                    })
                   ],
                 ),
               ),
             ],
           )
         ]));
+  }
+
+  Future<void> _getUserName() async {
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc((await FirebaseAuth.instance.currentUser).uid)
+        .get()
+        .then((value) {
+      setState(() {
+        _userName = value.data()['Name'].toString();
+      });
+    });
   }
 }
