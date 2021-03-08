@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "703441017297",
+    "project_id": "dbapp-3ef36",
+    "storage_bucket": "dbapp-3ef36.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:703441017297:android:fc260ce2ce81eb931768f0",
+        "android_client_info": {
+          "package_name": "com.alfy.dbapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "703441017297-1l15uaf9q4rudfdn975t9keak041fcmo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiVdLScmcMhkCLnjlWvC9o08oo_kszTYk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "703441017297-1l15uaf9q4rudfdn975t9keak041fcmo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:703441017297:android:1609aacf4749aa481768f0",
+        "android_client_info": {
+          "package_name": "com.example.AutoSale"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "703441017297-1l15uaf9q4rudfdn975t9keak041fcmo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiVdLScmcMhkCLnjlWvC9o08oo_kszTYk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "703441017297-1l15uaf9q4rudfdn975t9keak041fcmo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
