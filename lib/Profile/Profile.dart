@@ -13,6 +13,10 @@ class Profilescreen extends StatefulWidget {
 class _ProfilescreenState extends State<Profilescreen> {
   String id = FirebaseAuth.instance.currentUser.uid;
   String _userName;
+  String _phone;
+  String _location;
+  String _salename;
+  String _email = FirebaseAuth.instance.currentUser.email;
   void initState() {
     super.initState();
     _getUserName();
@@ -64,7 +68,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                   right: 8,
                 ),
                 child: Row(children: <Widget>[
-                  Text("Shop Name",
+                  Text(_salename,
                       style: TextStyle(fontSize: 30, color: Colors.black)),
                 ]),
               ),
@@ -86,7 +90,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                     ),
                     Expanded(
                       flex: 1,
-                      child: Text("Kasun"),
+                      child: Text(_userName),
                     ),
                   ],
                 ),
@@ -102,7 +106,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                     ),
                     Expanded(
                       flex: 1,
-                      child: Text("0771234567"),
+                      child: Text(_phone),
                     ),
                   ],
                 ),
@@ -118,7 +122,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                     ),
                     Expanded(
                       flex: 1,
-                      child: Text("Mawanella"),
+                      child: Text(_location),
                     ),
                   ],
                 ),
@@ -134,11 +138,8 @@ class _ProfilescreenState extends State<Profilescreen> {
                     ),
                     Expanded(
                       flex: 1,
-                      child: Text("abcd@gmail.com"),
+                      child: Text(_email),
                     ),
-                    RaisedButton(onPressed: () {
-                      print(_userName);
-                    })
                   ],
                 ),
               ),
@@ -155,6 +156,9 @@ class _ProfilescreenState extends State<Profilescreen> {
         .then((value) {
       setState(() {
         _userName = value.data()['Name'].toString();
+        _phone = value.data()['Phone'].toString();
+        _location = value.data()['City'].toString();
+        _salename = value.data()['ShopName'].toString();
       });
     });
   }

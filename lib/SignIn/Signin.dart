@@ -2,6 +2,7 @@ import 'package:AutoSale/Home/Home.dart';
 import 'package:flutter/material.dart';
 import 'package:AutoSale/SignUp/Signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class Signinscreen extends StatelessWidget {
