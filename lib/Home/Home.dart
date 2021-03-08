@@ -247,126 +247,47 @@ class Homescreen extends StatelessWidget {
         ),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('Users')
-            .doc(FirebaseAuth.instance.currentUser.uid)
-            .collection('Sale')
-            .orderBy("date", descending: true)
-            .snapshots(),
+        // get snapshots of users collections
+        stream: FirebaseFirestore.instance.collection("Users").snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return LoadingFlipping.circle();
           }
-          return ListView(
-              children: snapshot.data.docs.map((document) {
-            return Column(
-              children: <Widget>[
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: []),
-                Column(
-                  children: [
-                    SizedBox(height: 10),
-                    SizedBox(height: 30),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                            flex: 1,
-                            child: Image.network(
-                              document["Image"],
-                              width: 100,
-                              height: 100,
-                            )),
-                        Expanded(
-                          flex: 1,
-                          child: Column(children: [
-                            Row(
-                              children: [
-                                Text(
-                                  "Model :",
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                                Text(
-                                  document["Model"],
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 5),
-                            Row(
-                              children: [
-                                Text(
-                                  "Year :",
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                                Text(
-                                  document["Year"],
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 5),
-                            Row(
-                              children: [
-                                Text(
-                                  "Contact No :",
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                                Text(
-                                  document["Phone"],
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 5),
-                            Row(
-                              children: [
-                                Text(
-                                  "Location :",
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                                Text(
-                                  document["Location"],
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 5),
-                            Row(
-                              children: [
-                                Text(
-                                  "Price :",
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                                Text(
-                                  document["Price"],
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ]),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Divider(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            );
-          }).toList());
+
+          return SingleChildScrollView(
+            child: Column(
+              // Go through each user document
+              children: snapshot.data.docs.map((docReference) {
+                return StreamBuilder(
+                  // get snapshots of sales collection of each user
+                  stream: docReference.reference
+                      .collection('Sale')
+                      .orderBy("date", descending: true)
+                      .snapshots(),
+                  builder: (_, AsyncSnapshot<QuerySnapshot> collectionSnap) {
+                    // display each sales data
+                    return collectionSnap.hasData
+                        ? Column(
+                            children: collectionSnap.data.docs
+                                .map((documentSnap) =>
+                                    _TukDataWidget(document: documentSnap))
+                                .toList(),
+                          )
+                        : CircularProgressIndicator();
+                  },
+                );
+              }).toList(),
+            ),
+          );
+          // .collection('Sale')
+          // .orderBy("date", descending: true)
+          // .snapshots();
+
+          // return ListView(
+          //   children: snapshot.data.docs.map((document) {
+          //     return _TukDataWidget(document: document);
+          //   }).toList(),
+          // );
         },
       ),
     );
@@ -375,5 +296,132 @@ class Homescreen extends StatelessWidget {
   _signOut() async {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     await _firebaseAuth.signOut();
+  }
+}
+
+/// Display Tuk data
+class _TukDataWidget extends StatelessWidget {
+  const _TukDataWidget({
+    Key key,
+    @required this.document,
+  }) : super(key: key);
+
+  final QueryDocumentSnapshot document;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: []),
+        Column(
+          children: [
+            SizedBox(height: 10),
+            SizedBox(height: 30),
+            Row(
+              children: <Widget>[
+                //* image
+                Expanded(
+                  flex: 1,
+                  child: Image.network(
+                    document["Image"],
+                    width: 100,
+                    height: 100,
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Column(children: [
+                    //* model
+                    Row(
+                      children: [
+                        Text(
+                          "Model :",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        Text(
+                          document["Model"],
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 5),
+
+                    //* year
+                    Row(
+                      children: [
+                        Text(
+                          "Year :",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        Text(
+                          document["Year"],
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 5),
+
+                    //* contact number
+                    Row(
+                      children: [
+                        Text(
+                          "Contact No :",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        Text(
+                          document["Phone"],
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 5),
+
+                    //* location
+                    Row(
+                      children: [
+                        Text(
+                          "Location :",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        Text(
+                          document["Location"],
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 5),
+
+                    //* price
+                    Row(
+                      children: [
+                        Text(
+                          "Price :",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        Text(
+                          document["Price"],
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ]),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Divider(
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        )
+      ],
+    );
   }
 }
