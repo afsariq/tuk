@@ -1,9 +1,8 @@
+import 'package:AutoSale/Editprofile/Editprofile.dart';
 import 'package:AutoSale/Home/Home.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:loading_animations/loading_animations.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class Profilescreen extends StatefulWidget {
   @override
@@ -26,6 +25,22 @@ class _ProfilescreenState extends State<Profilescreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          actions: <Widget>[
+            Center(
+                child: IconButton(
+              icon: Icon(
+                Icons.settings,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Editprofilescreen()));
+              },
+            ))
+          ],
+          backgroundColor: Colors.amber,
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
@@ -34,33 +49,33 @@ class _ProfilescreenState extends State<Profilescreen> {
             },
           ),
           title: Text("Profile", style: TextStyle(letterSpacing: 1.1)),
+
           //centerTitle: true,
         ),
         body: ListView(children: <Widget>[
           SizedBox(
             height: 20,
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  // Text("Shop Name", style: TextStyle(fontSize: 30)),
-                  Icon(Icons.settings),
-                ]),
-          ),
           Column(
             children: <Widget>[
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CircleAvatar(
-                      backgroundColor: Colors.amber,
-                      radius: 50,
-                    )
-                  ]),
               SizedBox(
                 height: 20,
+              ),
+              CircleAvatar(
+                // backgroundImage: NetworkImage(""),
+                backgroundColor: Colors.amber,
+                radius: 50,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: IconButton(
+                    icon: Icon(Icons.edit),
+                    color: Colors.grey,
+                    onPressed: () {},
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 15,
               ),
               Padding(
                 padding: const EdgeInsets.only(
@@ -68,6 +83,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                   right: 8,
                 ),
                 child: Row(children: <Widget>[
+                  SizedBox(height: 30),
                   Text(_salename,
                       style: TextStyle(fontSize: 30, color: Colors.black)),
                 ]),
@@ -79,14 +95,17 @@ class _ProfilescreenState extends State<Profilescreen> {
                   color: Colors.black,
                 ),
               ),
-              SizedBox(height: 18),
+              SizedBox(height: 30),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(left: 30.0, bottom: 10, top: 10),
                 child: Row(
                   children: <Widget>[
                     Expanded(
                       flex: 1,
-                      child: Text("Name :"),
+                      child: Text(
+                        "User Name :",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                     Expanded(
                       flex: 1,
@@ -97,12 +116,15 @@ class _ProfilescreenState extends State<Profilescreen> {
               ),
               SizedBox(height: 5),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(left: 30.0, bottom: 10, top: 10),
                 child: Row(
                   children: <Widget>[
                     Expanded(
                       flex: 1,
-                      child: Text("ContactNo: :"),
+                      child: Text(
+                        "ContactNo: :",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                     Expanded(
                       flex: 1,
@@ -113,12 +135,15 @@ class _ProfilescreenState extends State<Profilescreen> {
               ),
               SizedBox(height: 5),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(left: 30.0, bottom: 10, top: 10),
                 child: Row(
                   children: <Widget>[
                     Expanded(
                       flex: 1,
-                      child: Text("Location :"),
+                      child: Text(
+                        "Location :",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                     Expanded(
                       flex: 1,
@@ -129,12 +154,15 @@ class _ProfilescreenState extends State<Profilescreen> {
               ),
               SizedBox(height: 5),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(left: 30.0, bottom: 10, top: 10),
                 child: Row(
                   children: <Widget>[
                     Expanded(
                       flex: 1,
-                      child: Text("Email: :"),
+                      child: Text(
+                        "Email: :",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                     Expanded(
                       flex: 1,
@@ -151,7 +179,7 @@ class _ProfilescreenState extends State<Profilescreen> {
   Future<void> _getUserName() async {
     FirebaseFirestore.instance
         .collection('Users')
-        .doc((await FirebaseAuth.instance.currentUser).uid)
+        .doc((FirebaseAuth.instance.currentUser).uid)
         .get()
         .then((value) {
       setState(() {

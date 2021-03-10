@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:intl/intl.dart';
 
 class Yoursalescreen extends StatelessWidget {
   @override
@@ -18,9 +19,11 @@ class Yoursalescreen extends StatelessWidget {
             //print('abcd');
           },
           child: Icon(Icons.add),
+          backgroundColor: Colors.amber,
         ),
       ),
       appBar: AppBar(
+          backgroundColor: Colors.amber,
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
@@ -44,6 +47,9 @@ class Yoursalescreen extends StatelessWidget {
           }
           return ListView(
               children: snapshot.data.docs.map((document) {
+            Timestamp t = document["date"];
+            DateTime d = t.toDate();
+
             return Column(
               children: <Widget>[
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: []),
@@ -55,10 +61,14 @@ class Yoursalescreen extends StatelessWidget {
                       children: <Widget>[
                         Expanded(
                             flex: 1,
-                            child: Image.network(
-                              document["Image"],
-                              width: 100,
-                              height: 100,
+                            child: Column(
+                              children: [
+                                Image.network(
+                                  document["Image"],
+                                  width: 100,
+                                  height: 100,
+                                ),
+                              ],
                             )),
                         Expanded(
                           flex: 1,
@@ -144,7 +154,7 @@ class Yoursalescreen extends StatelessWidget {
                                   style: TextStyle(fontSize: 12),
                                 ),
                                 Text(
-                                  document["date"].toString(),
+                                  DateFormat('yyyy/MM/dd').format(d),
                                   style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold),
@@ -155,8 +165,17 @@ class Yoursalescreen extends StatelessWidget {
                         ),
                       ],
                     ),
+                    IconButton(
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                        onPressed: () {}),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(
+                        right: 8.0,
+                        left: 8.0,
+                      ),
                       child: Divider(
                         color: Colors.grey,
                       ),
