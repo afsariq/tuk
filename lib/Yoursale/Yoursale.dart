@@ -166,11 +166,14 @@ class Yoursalescreen extends StatelessWidget {
                       ],
                     ),
                     IconButton(
-                        icon: Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ),
-                        onPressed: () {}),
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {
+                        //todo: delete file
+                      },
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                         right: 8.0,

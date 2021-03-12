@@ -250,8 +250,12 @@ class Homescreen extends StatelessWidget {
         // get snapshots of users collections
         stream: FirebaseFirestore.instance.collection("Users").snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return LoadingFlipping.circle();
+          } else if (!snapshot.hasData) {
+            return Center(
+              child: Text("No Data!"),
+            );
           }
 
           return SingleChildScrollView(
