@@ -11,11 +11,14 @@ class Profilescreen extends StatefulWidget {
 
 class _ProfilescreenState extends State<Profilescreen> {
   String id = FirebaseAuth.instance.currentUser.uid;
-  String _userName;
-  String _phone;
-  String _location;
-  String _salename;
   String _email = FirebaseAuth.instance.currentUser.email;
+  // default value of string is null
+  // since fallowing variables are used before giving them the actual values
+  // we have to give them an initial value
+  String _userName = '';
+  String _phone = '';
+  String _location = '';
+  String _salename = '';
   void initState() {
     super.initState();
     _getUserName();
@@ -177,17 +180,16 @@ class _ProfilescreenState extends State<Profilescreen> {
   }
 
   Future<void> _getUserName() async {
-    FirebaseFirestore.instance
+    var value = await FirebaseFirestore.instance
         .collection('Users')
         .doc((FirebaseAuth.instance.currentUser).uid)
-        .get()
-        .then((value) {
-      setState(() {
-        _userName = value.data()['Name'].toString();
-        _phone = value.data()['Phone'].toString();
-        _location = value.data()['City'].toString();
-        _salename = value.data()['ShopName'].toString();
-      });
+        .get();
+
+    setState(() {
+      _userName = value.data()['Name'].toString();
+      _phone = value.data()['Phone'].toString();
+      _location = value.data()['City'].toString();
+      _salename = value.data()['ShopName'].toString();
     });
   }
 }
