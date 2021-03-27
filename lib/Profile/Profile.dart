@@ -3,6 +3,10 @@ import 'package:AutoSale/Home/Home.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+import 'dart:math';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Profilescreen extends StatefulWidget {
   @override
@@ -10,19 +14,24 @@ class Profilescreen extends StatefulWidget {
 }
 
 class _ProfilescreenState extends State<Profilescreen> {
+  File sampleImage;
+  final picker = ImagePicker();
   String id = FirebaseAuth.instance.currentUser.uid;
-  String _email = FirebaseAuth.instance.currentUser.email;
-  // default value of string is null
-  // since fallowing variables are used before giving them the actual values
-  // we have to give them an initial value
   String _userName = '';
   String _phone = '';
   String _location = '';
   String _salename = '';
+  String _email = '';
+  
   void initState() {
     super.initState();
     _getUserName();
+   
   }
+
+
+  // String id = FirebaseAuth.instance.currentUser.uid;
+  static final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -64,19 +73,9 @@ class _ProfilescreenState extends State<Profilescreen> {
               SizedBox(
                 height: 20,
               ),
-              CircleAvatar(
-                // backgroundImage: NetworkImage(""),
-                backgroundColor: Colors.amber,
-                radius: 50,
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: IconButton(
-                    icon: Icon(Icons.edit),
-                    color: Colors.grey,
-                    onPressed: () {},
-                  ),
-                ),
-              ),
+            
+              
+             
               SizedBox(
                 height: 15,
               ),
@@ -180,16 +179,20 @@ class _ProfilescreenState extends State<Profilescreen> {
   }
 
   Future<void> _getUserName() async {
-    var value = await FirebaseFirestore.instance
+    FirebaseFirestore.instance
         .collection('Users')
         .doc((FirebaseAuth.instance.currentUser).uid)
-        .get();
-
-    setState(() {
-      _userName = value.data()['Name'].toString();
-      _phone = value.data()['Phone'].toString();
-      _location = value.data()['City'].toString();
-      _salename = value.data()['ShopName'].toString();
+        .get()
+        .then((value) {
+      setState(() {
+        _userName = value.data()['Name'].toString();
+        _phone = value.data()['Phone'].toString();
+        _location = value.data()['City'].toString();
+        _salename = value.data()['ShopName'].toString();
+        _email = FirebaseAuth.instance.currentUser.email;
+      });
     });
   }
+
+  
 }

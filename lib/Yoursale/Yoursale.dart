@@ -49,6 +49,7 @@ class Yoursalescreen extends StatelessWidget {
               children: snapshot.data.docs.map((document) {
             Timestamp t = document["date"];
             DateTime d = t.toDate();
+            String a = document.id;
 
             return Column(
               children: <Widget>[
@@ -91,14 +92,16 @@ class Yoursalescreen extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  "Year :",
+                                  "Details :",
                                   style: TextStyle(fontSize: 12),
                                 ),
-                                Text(
-                                  document["Year"],
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
+                                Flexible(
+                                  child: Text(
+                                    document["Year"],
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ],
                             ),
@@ -166,14 +169,56 @@ class Yoursalescreen extends StatelessWidget {
                       ],
                     ),
                     IconButton(
-                      icon: Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                      onPressed: () {
-                        //todo: delete file
-                      },
-                    ),
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                        onPressed: () {
+                          AlertDialog alert = AlertDialog(
+                            title: Text("Delete?"),
+                            actions: [
+                              FlatButton(
+                                child: Row(
+                                  children: [
+                                    Text("Yes"),
+                                  ],
+                                ),
+                                onPressed: () {
+                                  FirebaseFirestore.instance
+                                      .collection('Users')
+                                      .doc(
+                                          FirebaseAuth.instance.currentUser.uid)
+                                      .collection('Sale')
+                                      .doc(a)
+                                      .delete();
+
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              Yoursalescreen()));
+                                },
+                              ),
+                              FlatButton(
+                                child: Row(
+                                  children: [
+                                    Text("No"),
+                                  ],
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              )
+                            ],
+                          );
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext) {
+                                return alert;
+                              },
+                              barrierDismissible: true);
+                          //print(a);
+                        }),
                     Padding(
                       padding: const EdgeInsets.only(
                         right: 8.0,

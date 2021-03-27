@@ -6,6 +6,7 @@ class Editprofilescreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          backgroundColor: Colors.amber,
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
@@ -76,7 +77,7 @@ class Editprofilescreen extends StatelessWidget {
           child: Container(
             // width: MediaQuery.of(context).size.width * 0.5,
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Colors.green[900],
               borderRadius: BorderRadius.circular(10),
             ),
             child: FlatButton(
